@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>    
+<head>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <!-- Chrome, Firefox OS and Opera -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=476mA4zprB">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=476mA4zprB">
+    <link rel="shortcut icon" href="/favicon.ico?v=476mA4zprB">
+    <!-- Tab Color iOS Safari -->
+    <meta name="apple-mobile-web-app-title" content="Metrici.ro">
+    <meta name="application-name" content="Metrici.ro">
+    <!-- Tab Color Android Chrome -->
+    <meta name="theme-color" content="#e11422">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel = "stylesheet" type = "text/css" href = "newMaster.css">   
+    <title>Static IP</title>
+</head>
+    
+<body>
+    <div class="logo_container">
+        <img url="/logo.png">
+        <button class="back_button" onclick="location.href = '/chooseIP';">Go Back</button>
+        <span class = "version">Radar Controller</br>Version: %PH_Version%</span>
+    </div>
+
+    <div class="center_box">
+        <div class = "box_head">
+            <div class = "title"><h1>Setup - Enter Values</h1></div>
+        </div>
+        <form method="POST" name="simple_form" action="/staticIP" onsubmit="return ValidateIPaddress()">
+            <div class ="input_row">                
+                <input type="text" class="input_text" placeholder="Type here the IP Address" id="ipAddress" name="ipAddress" value="" required
+                onchange="ValidateIPaddressOnChange(this, 'ipaddress')" />
+                <label class="label_" for="ipAddress">IP Address</label>
+            </div>        
+            <div class="input_row">              
+                <input type="text" class="input_text" placeholder="Type here the Gateway" id="gateway" name="gateway" value="" required
+                onchange="ValidateIPaddressOnChange(this, 'gateway')" />
+                <label class="label_" for="gateway">Gateway</label>
+            </div>
+            <div class ="input_row">            
+                <input type="text" class="input_text" placeholder="Type here the Subnet Mask" id="subnet" name="subnet" value="" required
+                onchange="ValidateIPaddressOnChange(this, 'subnet')" />
+                <label class="label_" for="subnet">Subnet Mask</label>
+            </div>
+            <div class ="input_row">
+                <input type="text" class="input_text" placeholder="Type here the DNS" id="dns" name="dns" value="" required
+                onchange="ValidateIPaddressOnChange(this, 'dns')" />
+                <label class="label_" for="dns">DNS</label>
+            </div>                 
+            <input class="button" type="submit" name="saveStatic" value="Save and Reboot">
+        </form>
+    </div>    
+
+    <script>
+        
+        function ValidateIPaddressOnChange(input, type)
+        {
+            var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            var strtype = "";
+            switch(type){
+                case "ipaddress": strtype = "IP Address"; break;
+                case "gateway": strtype = "Gateway"; break;
+                case "subnet":  strtype = "Subnet Mask"; break;
+                case "dns": strtype = "DNS"; break;
+            }
+    
+            if(!input.value.match(ipformat)) {
+                document.getElementById(input.name).className =
+                    document.getElementById(input.name).className.replace
+                    ( /(?:^|\s)correct(?!\S)/g , '' );
+                document.getElementById(input.name).className += " wrong";
+                input.focus();
+                alert(strtype + " is invalid!");
+            }
+            else if(input.value != null){
+                document.getElementById(input.name).className =
+                    document.getElementById(input.name).className.replace
+                    ( /(?:^|\s)wrong(?!\S)/g , '' );         
+                document.getElementById(input.name).className += " correct";
+            }
+        }
+    
+        function ValidateIPaddress()
+        {
+            var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            var ipaddr = document.forms["simple_form"]["ipAddress"];
+            var gateway = document.forms["simple_form"]["gateway"];
+            var subnet = document.forms["simple_form"]["subnet"];
+            var dns = document.forms["simple_form"]["dns"];
+            var counter = 0;
+    
+            if(ipaddr.value.match(ipformat)) {
+                ipaddr.focus();
+            } else {
+                alert("You have entered an invalid IP Address!");
+                ipaddr.focus();
+                return (false);
+            }
+            if(gateway.value.match(ipformat)) {
+                gateway.focus();
+            } else {
+                window.alert("You have entered an invalid GATEWAY Address!");
+                gateway.focus();
+                return (false);
+            }            
+            if(subnet.value.match(ipformat)) {
+                subnet.focus();
+            } else {
+                window.alert("You have entered an invalid SUBNET Address!");
+                subnet.focus();
+                return (false);
+            }            
+            if(dns.value.match(ipformat)) {
+                dns.focus();
+            } else {
+                window.alert("You have entered an invalid DNS Address!");
+                dns.focus();
+                return (false);
+            }
+        }
+    </script>    
+    
+</body>    
+</html>

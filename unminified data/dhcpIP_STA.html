@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>    
+<head>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <!-- Chrome, Firefox OS and Opera -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Tab Color iOS Safari -->
+    <meta name="apple-mobile-web-app-title" content="Metrici.ro">
+    <meta name="application-name" content="Metrici.ro">
+    <!-- Tab Color Android Chrome -->
+    <meta name="theme-color" content="#e11422">
+    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel = "stylesheet" type = "text/css" href = "newMaster.css">  
+    <title>DHCP IP</title>
+</head>
+    
+<body>
+    <div class="logo_container">
+        <img url="/logo.png">
+        <span class = "version">Radar Controller</br>Version: %PH_Version%</span>
+    </div>
+
+    <div class="topnav" id="myTopnav">
+        <div class = "center_nav">
+            <a href="/home">Home</a>
+            <div class="dropdown active">
+                <button class="dropbtn" >Network Settings
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/dhcpIP">DHCP IP</a>
+                    <a href="/staticIP">Static IP</a>
+                </div>
+            </div>
+            <a href="/files">Import/Export Data</a>
+            <a href="/radar">Radar Settings</a>
+            <a href="/update">Update</a>
+            <a href="javascript:void(0);" class="icon" onclick="navBarFunction()">
+            <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="center_box">
+        <div class = "box_head">           
+            <div class = "title"><h1>Setup - Enter Values</h1></div>
+        </div>
+        <form method="POST">
+            <input class="button" type="submit" name="saveDHCP" value="Save and Reboot">
+        </form>
+    </div>
+<script>
+    function navBarFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+</script>
+
+</body> 
+</html>

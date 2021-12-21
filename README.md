@@ -14,3 +14,11 @@ Tests reveal that:
 Speeders will slow down up to 80% of the time when alerted by a radar sign
 Typical speed reductions are 10-20%.
 Overall compliance with the posted speed limit will go up by 30-60%.
+
+## Home Page
+
+![Home Page](https://github.com/GeorgeFlorian/RadarContoller-ESP32/blob/main/unminified%20data/1%20-%20Home%20Settings.PNG?raw=true)
+
+## Radar Settings
+
+![Home Page](https://github.com/GeorgeFlorian/RadarContoller-ESP32/blob/main/unminified%20data/2%20-%20RadarSettings.PNG?raw=true)

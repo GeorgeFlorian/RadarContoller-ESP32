@@ -45,6 +45,7 @@ String value_login[3];
 bool userFlag = false;
 static bool eth_connected = false;
 IPAddress local_IP_STA, gateway_STA, subnet_STA, primaryDNS;
+bool laser_status = false;
 
 // Radar's variables
 String Controller_IP = "";
@@ -126,6 +127,8 @@ String processor(const String &var)
     return Controller_IP;
   else if (var == "PH_Controller_Port")
     return Controller_Port;
+  else if (var == "ph_laser_status")
+    return laser_status ? "ON" : "OFF";
   else if (var == "PH_Speed_Unit")
     return Units;
   else if (var == "PH_Min_Speed")
@@ -288,23 +291,21 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
 //------------------------- void ethernetConfig(String x[])
 void ethernetConfig(String x[])
 {
-  if (x[0] == "WiFi")
-    return;
   ETH.begin();
 
-  if (x[1] != NULL && // Local IP
+  if (x[0] != NULL && // Local IP
+      x[0].length() != 0 &&
+      x[1] != NULL && // Gateway
       x[1].length() != 0 &&
-      x[2] != NULL && // Gateway
+      x[2] != NULL && // Subnet
       x[2].length() != 0 &&
-      x[3] != NULL && // Subnet
-      x[3].length() != 0 &&
-      x[4] != NULL && // DNS
-      x[4].length() != 0)
+      x[3] != NULL && // DNS
+      x[3].length() != 0)
   {
-    local_IP_STA.fromString(x[1]);
-    gateway_STA.fromString(x[2]);
-    subnet_STA.fromString(x[3]);
-    primaryDNS.fromString(x[4]);
+    local_IP_STA.fromString(x[0]);
+    gateway_STA.fromString(x[1]);
+    subnet_STA.fromString(x[2]);
+    primaryDNS.fromString(x[3]);
 
     if (!ETH.config(local_IP_STA, gateway_STA, subnet_STA, primaryDNS))
     {
@@ -588,6 +589,21 @@ void setup()
     return;
   }
 
+  if (q == 2)
+  {
+    if (SPIFFS.exists("/network.txt"))
+      SPIFFS.remove("/network.txt");
+    if (SPIFFS.exists("/user.txt"))
+      SPIFFS.remove("/user.txt");
+    if (SPIFFS.exists("/outputs.txt"))
+      SPIFFS.remove("/outputs.txt");
+    if (SPIFFS.exists("/inputs.txt"))
+      SPIFFS.remove("/inputs.txt");
+    if (SPIFFS.exists("/wiegand.txt"))
+      SPIFFS.remove("/wiegand.txt");
+    logOutput((String) "WARNING: Reset button was pressed ! AP will start momentarily");
+  }
+
   listAllFiles();
 
   //--- Check if /networkRadar.txt exists. If not then create one
@@ -615,21 +631,7 @@ void setup()
     String v[7];
     fileReadLines(networkRead, v);
     networkRead.close();
-    ETH.begin();
-    int ki = 0;
-    while (!eth_connected && ki < 20)
-    {
-      Serial.println("Establishing ETHERNET Connection ... ");
-      delay(1000);
-      ki++;
-    }
-    if (!eth_connected)
-    {
-      logOutput((String) "(1) Could not access Network ! Trying again...");
-      logOutput((String) "Controller will restart in 1 second !");
-      delay(1000);
-      ESP.restart();
-    }
+
     ethernetConfig(v);
     Controller_IP = ETH.localIP().toString();
 
@@ -728,6 +730,14 @@ void setup()
                 configWrite.close();
               }
         } // for(int i=0;i<params;i++)
+      } else if(request->hasArg("laser_on")) {
+        digitalWrite(RELAY1, HIGH);
+        laser_status = true;
+        request->redirect("/home");
+      } else if(request->hasArg("laser_off")) {
+        digitalWrite(RELAY1, LOW);
+        laser_status = false;
+        request->redirect("/home");
       } else {
         request->redirect("/home");
       } });
@@ -843,7 +853,7 @@ void setup()
       if(request->hasArg("saveDHCP")){        
         File inputsWrite = SPIFFS.open("/networkRadar.txt", "w");
         if(!inputsWrite) logOutput((String)"ERROR_INSIDE_POST ! Couldn't open file to write DHCP IP credentials !");
-        inputsWrite.println("DHCP IP");  // Connection Type ? WiFi : Ethernet
+        inputsWrite.println("DHCP IP");  // Connection Type ? Static : DHCP IP
         inputsWrite.close();
         logOutput("Configuration saved !");
         request->send(200, "text/html", "<div style=\"text-align:center; font-family:arial;\">Congratulation !</br></br>You have successfully changed the networks settings.</br></br>The device will now restart and try to apply the new settings.</br></br>You can get this device's IP by looking through your Access Point's DHCP List."); 
@@ -1129,7 +1139,7 @@ void loop()
             logOutput("ERROR ! No IP for the Server was found. Please enter Server's IP !");
           }
           // delay(520);
-        } // if(digitalRead(TRIGGER_PIN) == LOW) {
+        } // if(digitalRead(TRIGGER_PIN) == LOW)
 
         if (digitalRead(TRIGGER_PIN) == HIGH && trigger == true)
         {

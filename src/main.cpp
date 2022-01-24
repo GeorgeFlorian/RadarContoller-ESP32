@@ -591,16 +591,12 @@ void setup()
 
   if (q == 2)
   {
-    if (SPIFFS.exists("/network.txt"))
-      SPIFFS.remove("/network.txt");
-    if (SPIFFS.exists("/user.txt"))
-      SPIFFS.remove("/user.txt");
-    if (SPIFFS.exists("/outputs.txt"))
-      SPIFFS.remove("/outputs.txt");
-    if (SPIFFS.exists("/inputs.txt"))
-      SPIFFS.remove("/inputs.txt");
-    if (SPIFFS.exists("/wiegand.txt"))
-      SPIFFS.remove("/wiegand.txt");
+    if (SPIFFS.exists("/networkRadar.txt"))
+      SPIFFS.remove("/networkRadar.txt");
+    if (SPIFFS.exists("/userRadar.txt"))
+      SPIFFS.remove("/userRadar.txt");
+    if (SPIFFS.exists("/configRadar.txt"))
+      SPIFFS.remove("/configRadar.txt");
     logOutput((String) "WARNING: Reset button was pressed ! AP will start momentarily");
   }
 

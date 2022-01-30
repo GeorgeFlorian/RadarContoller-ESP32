@@ -1080,6 +1080,7 @@ void loop()
           {
             char radar = USE_SERIAL1.read();
             Radar_String += radar; // this adds up all the input
+            delay(15);
           }
           startTimeSerial = millis();
         }
@@ -1087,6 +1088,7 @@ void loop()
         if (Radar_String.length() != 0 && Radar_String.indexOf("SET") < 0)
         {
           client.write(Radar_String.c_str());
+          logOutput("Measured speed: " + Radar_String);
           Radar_String = "";
         }
         else if (Radar_String.indexOf("SET") > 0 && Radar_String.indexOf("OK") > 0)

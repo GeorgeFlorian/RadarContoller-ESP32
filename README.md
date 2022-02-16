@@ -1,6 +1,6 @@
 # RadarContoller-ESP32
 
-Our Metrici Observer Radar is a perfect fit for monitoring speed in parking lots, on industrial parks or around specific interest points for a city: e.g. schools, busy streets, crosswalks etc. The speed of a vehicle is recorded in database next to car's photo and along with the usual Metrici LPR reports.
+The Metrici Observer Radar is a perfect fit for monitoring speed in parking lots, on industrial parks or around specific interest points for a city: e.g. schools, busy streets, crosswalks etc. The speed of a vehicle is recorded in database next to car's photo and along with the usual Metrici LPR reports.
 
 Also, integrated with Metrici Display and the Observer Radar, Metrici LPR can show the speed along with alerts for drivers to slow down or to reduce the speed and abide to the regulations.
 
